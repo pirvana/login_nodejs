@@ -19,19 +19,34 @@ mongoose.connect(url, {
     useUnifiedTopology: true
 });
 
+//require('./config/passport')(passport);
+
 //setting
 app.set('port', process.env.PORT || 3000 );
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-
 //middlewares
+app.use(morgan('dev'));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(session({
+    secret: 'pirvanariel',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 
 //routes
+require('./app/routes')(app, passport);
 
 //static Files
+app.use(express.static(path.join(__dirname, 'views')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 
  app.listen(app.get('port'), () => {
-     console.log('server on port', app.get('port'));
+     console.log('server on port', app.get('port'), __dirname);
  });
