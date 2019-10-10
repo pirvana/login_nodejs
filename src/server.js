@@ -19,7 +19,7 @@ mongoose.connect(url, {
     useUnifiedTopology: true
 });
 
-//require('./config/passport')(passport);
+require('./config/passport')(passport);
 
 //setting
 app.set('port', process.env.PORT || 3000 );
